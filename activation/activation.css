@@ -16,7 +16,7 @@
 
 .activation__nav {
   flex-shrink: 0;
-  padding: 4px 16px 4px 12px;
+  padding: max(4px, env(safe-area-inset-top, 0px)) 16px 4px 12px;
   display: flex;
   align-items: center;
   gap: 4px;
@@ -128,7 +128,7 @@
 
 .activation__footer {
   flex-shrink: 0;
-  padding: 8px 24px 8px;
+  padding: 8px 24px max(8px, env(safe-area-inset-bottom, 0px));
   background: linear-gradient(to bottom, rgba(255, 255, 255, 0), #fff 55%);
 }
 
@@ -207,5 +207,32 @@
   100% {
     opacity: 1;
     transform: translateY(0);
+  }
+}
+
+/* —— mobile: full-screen instead of demo frame —— */
+
+@media (max-width: 480px) {
+  .activation {
+    width: 100%;
+    height: -webkit-fill-available;
+    height: 100dvh;
+    min-height: -webkit-fill-available;
+    min-height: 100dvh;
+    border-radius: 0;
+    box-shadow: none;
+  }
+
+  .activation__home-bar {
+    display: none;
+  }
+
+  .activation__envelope-host {
+    padding-inline: 16px;
+    max-width: 100%;
+  }
+
+  .activation__hint {
+    bottom: calc(292px + env(safe-area-inset-bottom, 0px));
   }
 }
