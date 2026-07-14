@@ -77,12 +77,12 @@
       '<div class="activation__center">' +
       '<div class="activation__envelope-host"></div>' +
       '</div>' +
-      '<p class="activation__hint">Впишите номер пластиковой карты</p>' +
-      '<div class="activation__keyboard">' +
-      this._buildKeyboard() +
-      '</div>' +
+      '<p class="activation__hint" hidden>Впишите номер пластиковой карты</p>' +
       '</div>' +
       '<footer class="activation__footer">' +
+      '<div class="activation__keyboard" hidden>' +
+      this._buildKeyboard() +
+      '</div>' +
       '<div class="activation__intro">' +
       '<h2 class="activation__intro-title">Карта уже у вас, осталось активировать</h2>' +
       '<p class="activation__intro-text">Рвём конверт, прям как подарочную упаковку</p>' +
@@ -125,21 +125,23 @@
   ActivationScreen.prototype._showKeyboard = function () {
     if (this.root.classList.contains('is-keyboard')) return;
 
-    var self = this;
-    var center = this.root.querySelector('.activation__center');
     var envelopeHost = this.root.querySelector('.activation__envelope-host');
     var body = this.root.querySelector('.activation__body');
+    var hint = this.root.querySelector('.activation__hint');
+    var keyboard = this.root.querySelector('.activation__keyboard');
+    var bodyRect = body.getBoundingClientRect();
+    var shiftY = bodyRect.top + 8 - envelopeHost.getBoundingClientRect().top;
+
+    envelopeHost.style.setProperty('--activation-shift-y', shiftY + 'px');
+
+    hint.hidden = false;
+    keyboard.hidden = false;
 
     this.root.classList.add('is-keyboard');
     this.envelope.showKeyboard();
 
     this.btnLabels.start.hidden = true;
     this.btnLabels.next.hidden = false;
-
-    requestAnimationFrame(function () {
-      var shiftY = body.getBoundingClientRect().top + 8 - envelopeHost.getBoundingClientRect().top;
-      center.style.setProperty('--activation-shift-y', shiftY + 'px');
-    });
   };
 
   ActivationScreen.prototype.destroy = function () {
