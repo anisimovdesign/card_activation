@@ -10,7 +10,7 @@
   var DEFAULTS = {
     width: 343,
     height: 221,
-    tearBottom: 39,
+    tearBottom: 38.8,
     insideSrc: 'Split_envelope_inside.png',
     formSrc: 'Form.png',
     topSrc: 'Split_envelope_top.png',
