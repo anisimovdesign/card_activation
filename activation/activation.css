@@ -9,11 +9,27 @@
   max-width: 100vw;
   height: 100%;
   height: 100svh;
-  background: linear-gradient(180deg, var(--activation-bg-top) 54%, var(--activation-bg-bottom) 100%);
+  background: #fff;
   overflow: hidden;
   display: flex;
   flex-direction: column;
   font-family: system-ui, -apple-system, 'YS Text', sans-serif;
+}
+
+.activation::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, var(--activation-bg-top) 54%, var(--activation-bg-bottom) 100%);
+  opacity: 1;
+  transition: opacity var(--activation-keyboard-duration) cubic-bezier(0.33, 0.86, 0.36, 1);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.activation > * {
+  position: relative;
+  z-index: 1;
 }
 
 .activation__nav {
@@ -145,7 +161,8 @@
 
 .activation__intro {
   margin-bottom: 16px;
-  text-align: center;
+  text-align: left;
+  transition: opacity var(--activation-keyboard-duration) cubic-bezier(0.33, 0.86, 0.36, 1);
 }
 
 .activation__intro-title {
@@ -192,12 +209,13 @@
 
 /* —— keyboard phase —— */
 
-.activation.is-keyboard {
-  background: #fff;
+.activation.is-keyboard::before {
+  opacity: 0;
 }
 
 .activation.is-keyboard .activation__intro {
-  display: none;
+  opacity: 0;
+  pointer-events: none;
 }
 
 .activation.is-keyboard .activation__center {
