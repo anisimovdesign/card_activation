@@ -94,6 +94,11 @@
   overflow: visible;
 }
 
+.activation__hint[hidden],
+.activation__keyboard[hidden] {
+  display: none !important;
+}
+
 .activation__hint {
   flex-shrink: 0;
   margin: 0;
@@ -106,6 +111,7 @@
 
 .activation__keyboard {
   flex-shrink: 0;
+  overflow: hidden;
 }
 
 .activation__keys {
@@ -206,10 +212,7 @@
 }
 
 .activation.is-keyboard .activation__intro {
-  opacity: 0;
-  max-height: 0;
-  margin-bottom: 0;
-  pointer-events: none;
+  display: none;
 }
 
 .activation.is-keyboard .activation__body {
@@ -221,13 +224,44 @@
   flex: 0 0 auto;
 }
 
+.activation.is-keyboard .activation__envelope-host {
+  transition: transform var(--activation-keyboard-duration) cubic-bezier(0.33, 0.86, 0.36, 1);
+  will-change: transform;
+}
+
 .activation.is-keyboard .activation__hint {
   padding-top: 12px;
   padding-bottom: 0;
+  animation: activation-hint-in var(--activation-keyboard-duration)
+    cubic-bezier(0.33, 0.86, 0.36, 1) 0.06s both;
 }
 
 .activation.is-keyboard .activation__keyboard {
   margin-bottom: 16px;
+  animation: activation-keyboard-in var(--activation-keyboard-duration)
+    cubic-bezier(0.33, 0.86, 0.36, 1) both;
+}
+
+@keyframes activation-hint-in {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes activation-keyboard-in {
+  from {
+    opacity: 0;
+    transform: translateY(28px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 /* —— desktop demo frame —— */

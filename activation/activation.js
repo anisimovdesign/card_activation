@@ -107,7 +107,7 @@
     envelopeOpts.onRevealComplete = function () {
       window.setTimeout(function () {
         self._showKeyboard();
-      }, 280);
+      }, 120);
       if (typeof userRevealComplete === 'function') userRevealComplete();
     };
 
@@ -125,8 +125,10 @@
   ActivationScreen.prototype._showKeyboard = function () {
     if (this.root.classList.contains('is-keyboard')) return;
 
+    var envelopeHost = this.root.querySelector('.activation__envelope-host');
     var hint = this.root.querySelector('.activation__hint');
     var keyboard = this.root.querySelector('.activation__keyboard');
+    var startTop = envelopeHost.getBoundingClientRect().top;
 
     hint.hidden = false;
     keyboard.hidden = false;
@@ -136,6 +138,21 @@
 
     this.btnLabels.start.hidden = true;
     this.btnLabels.next.hidden = false;
+
+    var invertY = startTop - envelopeHost.getBoundingClientRect().top;
+    envelopeHost.style.transition = 'none';
+    envelopeHost.style.transform = 'translateY(' + invertY + 'px)';
+    envelopeHost.offsetHeight;
+    envelopeHost.style.transition = '';
+    envelopeHost.style.transform = 'translateY(0)';
+
+    var onShiftEnd = function (e) {
+      if (e.propertyName !== 'transform') return;
+      envelopeHost.removeEventListener('transitionend', onShiftEnd);
+      envelopeHost.style.transition = '';
+      envelopeHost.style.transform = '';
+    };
+    envelopeHost.addEventListener('transitionend', onShiftEnd);
   };
 
   ActivationScreen.prototype.destroy = function () {
