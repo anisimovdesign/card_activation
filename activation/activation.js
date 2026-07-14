@@ -83,6 +83,10 @@
       '</div>' +
       '</div>' +
       '<footer class="activation__footer">' +
+      '<div class="activation__intro">' +
+      '<h2 class="activation__intro-title">Карта уже у вас, осталось активировать</h2>' +
+      '<p class="activation__intro-text">Рвём конверт, прям как подарочную упаковку</p>' +
+      '</div>' +
       '<button type="button" class="activation__btn" tabindex="-1">' +
       '<span class="activation__btn-label" data-state="start">Начать активацию</span>' +
       '<span class="activation__btn-label" data-state="next" hidden>Далее</span>' +
