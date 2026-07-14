@@ -11,7 +11,7 @@
     ['', '0', 'delete'],
   ];
 
-  var ENVELOPE_DESIGN = { width: 343, height: 221, handleOverflow: 38 };
+  var ENVELOPE_DESIGN = { width: 343, height: 221, handleOverflow: 30 };
 
   function resolveEnvelopeScale() {
     var designWidth = ENVELOPE_DESIGN.width;
