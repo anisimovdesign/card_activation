@@ -89,17 +89,38 @@
     this._build();
     this._applyHandleRestOffset();
     this._bindEvents();
-    this.update(0);
+
+    var self = this;
+    requestAnimationFrame(function () {
+      self._syncDragMetrics();
+      self.update(self.tearPx);
+    });
   }
 
   TearStrip.prototype._applyHandleRestOffset = function () {
+    this._syncDragMetrics();
+  };
+
+  TearStrip.prototype._syncDragMetrics = function () {
     var handleW = this.options.handleWidth || 75;
     var inset = this.options.handleInset != null ? this.options.handleInset : 8;
     var restOffset = inset + handleW / 2;
+    var rootRect = this.root.getBoundingClientRect();
+    var visualWidth = rootRect.width || this.stripWidth;
 
     this.handleRestOffset = restOffset;
+    this.coordRatio = visualWidth > 0 ? this.stripWidth / visualWidth : 1;
     this.tearMax = Math.max(0, this.stripWidth - inset * 2 - handleW);
     this.root.style.setProperty('--ts-handle-rest-offset', restOffset + 'px');
+  };
+
+  TearStrip.prototype._pointerXToTearPx = function (clientX, dragOffsetX) {
+    var rootRect = this.root.getBoundingClientRect();
+    var visualWidth = rootRect.width || this.stripWidth;
+    var ratio = visualWidth > 0 ? this.stripWidth / visualWidth : 1;
+    var centerXInternal = (clientX - rootRect.left - dragOffsetX) * ratio;
+
+    return centerXInternal - this.handleRestOffset;
   };
 
   TearStrip.prototype._getTornProgress = function (tearPx) {
@@ -173,6 +194,7 @@
 
     this.handle.addEventListener('pointerdown', function (e) {
       if (self.isComplete) return;
+      self._syncDragMetrics();
       self.isDragging = true;
       self.pointerId = e.pointerId;
       self.root.classList.add('is-dragging');
@@ -185,10 +207,8 @@
 
     this.handle.addEventListener('pointermove', function (e) {
       if (!self.isDragging || e.pointerId !== self.pointerId) return;
-      var rootRect = self.root.getBoundingClientRect();
-      var centerX = e.clientX - rootRect.left - self.dragOffsetX;
-      var tearX = centerX - self.handleRestOffset;
-      self.update(clamp(tearX, 0, self.stripWidth));
+      var tearX = self._pointerXToTearPx(e.clientX, self.dragOffsetX);
+      self.update(clamp(tearX, 0, self.tearMax));
     });
 
     var endDrag = function (e) {
@@ -197,13 +217,24 @@
       self.pointerId = null;
       self.root.classList.remove('is-dragging');
 
-      if (self.tearPx >= self.stripWidth - 0.5) {
+      if (self.tearPx >= self.tearMax - 0.5) {
         self._complete();
       }
     };
 
     this.handle.addEventListener('pointerup', endDrag);
     this.handle.addEventListener('pointercancel', endDrag);
+
+    var onViewportChange = function () {
+      if (self.isDragging) return;
+      self._syncDragMetrics();
+      self.update(self.tearPx);
+    };
+
+    window.addEventListener('resize', onViewportChange);
+    if (window.visualViewport) {
+      window.visualViewport.addEventListener('resize', onViewportChange);
+    }
   };
 
   /**
@@ -211,7 +242,8 @@
    * its right edge — keeps bottom flush with the handle at rest points.
    */
   TearStrip.prototype._getTornCount = function (tearPx) {
-    return clamp(Math.floor(tearPx / this.segmentWidth + 1e-6), 0, this.segmentCount);
+    var progress = this._getTornProgress(tearPx);
+    return clamp(Math.floor(progress * this.segmentCount + 1e-6), 0, this.segmentCount);
   };
 
   /**
@@ -333,13 +365,14 @@
   TearStrip.prototype.update = function (tearPx) {
     this.tearPx = tearPx;
     var tornCount = this._getTornCount(tearPx);
+    var effectiveTearPx = this._getEffectiveTearPx(tearPx);
 
     this.root.style.setProperty('--ts-tear', tearPx + 'px');
 
     if (this.options.animationMode === 'scatter') {
       this._updateScatter(tornCount);
     } else {
-      this._updatePeel(tearPx, tornCount);
+      this._updatePeel(effectiveTearPx, tornCount);
     }
 
     for (var i = 0; i < this.segmentCount; i++) {
@@ -376,7 +409,7 @@
   };
 
   TearStrip.prototype.getProgress = function () {
-    return this.tearPx / this.stripWidth;
+    return this._getTornProgress(this.tearPx);
   };
 
   TearStrip.prototype.destroy = function () {
