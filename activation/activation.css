@@ -98,7 +98,7 @@
   position: absolute;
   left: 0;
   right: 0;
-  bottom: 292px;
+  bottom: 0;
   margin: 0;
   padding: 0 24px;
   font-size: 16px;
@@ -106,7 +106,7 @@
   text-align: center;
   color: rgba(0, 0, 0, 0.86);
   opacity: 0;
-  transform: translateY(12px);
+  visibility: hidden;
   pointer-events: none;
 }
 
@@ -116,7 +116,7 @@
   right: 0;
   bottom: 0;
   opacity: 0;
-  transform: translateY(32px);
+  visibility: hidden;
   pointer-events: none;
 }
 
@@ -132,7 +132,7 @@
 
 .activation__key {
   flex: 1;
-  height: 65.5px;
+  height: clamp(48px, 14vw, 65.5px);
   border: none;
   background: transparent;
   font-size: 26px;
@@ -220,6 +220,8 @@
 
 .activation.is-keyboard .activation__intro {
   opacity: 0;
+  max-height: 0;
+  margin-bottom: 0;
   pointer-events: none;
 }
 

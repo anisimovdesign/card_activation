@@ -125,18 +125,21 @@
   ActivationScreen.prototype._showKeyboard = function () {
     if (this.root.classList.contains('is-keyboard')) return;
 
+    var self = this;
     var center = this.root.querySelector('.activation__center');
     var envelopeHost = this.root.querySelector('.activation__envelope-host');
     var body = this.root.querySelector('.activation__body');
-    var shiftY = body.getBoundingClientRect().top + 8 - envelopeHost.getBoundingClientRect().top;
-
-    center.style.setProperty('--activation-shift-y', shiftY + 'px');
 
     this.root.classList.add('is-keyboard');
     this.envelope.showKeyboard();
 
     this.btnLabels.start.hidden = true;
     this.btnLabels.next.hidden = false;
+
+    requestAnimationFrame(function () {
+      var shiftY = body.getBoundingClientRect().top + 8 - envelopeHost.getBoundingClientRect().top;
+      center.style.setProperty('--activation-shift-y', shiftY + 'px');
+    });
   };
 
   ActivationScreen.prototype.destroy = function () {
