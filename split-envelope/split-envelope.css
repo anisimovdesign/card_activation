@@ -1,6 +1,7 @@
 .split-envelope {
   --env-h: 221px;
   --env-w: 343px;
+  --env-scale: 1;
   --env-tear-bottom: 39px;
   --env-open-duration: 1.6s;
   --env-top-rotate: 0deg;
@@ -8,8 +9,9 @@
 
   position: relative;
   width: var(--env-w);
-  max-width: 100%;
   height: var(--env-h);
+  transform: scale(var(--env-scale));
+  transform-origin: center center;
   overflow: visible;
   border-radius: 12px;
   user-select: none;
@@ -38,8 +40,7 @@
   left: 50%;
   top: 50%;
   transform: translate(-50%, -50%) scale(1);
-  width: 55.4%;
-  max-width: 190px;
+  width: 190px;
   height: auto;
   z-index: 2;
   opacity: 1;
@@ -210,8 +211,7 @@
 .split-envelope.is-keyboard .split-envelope__form {
   animation: none;
   opacity: 1;
-  width: 55.4%;
-  max-width: 190px;
+  width: 190px;
   transform: translate(-50%, -50%) scale(1.6);
 }
 

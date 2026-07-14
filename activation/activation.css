@@ -68,8 +68,9 @@
   align-items: center;
   width: 100%;
   max-width: 100%;
+  min-height: var(--env-layout-h, 221px);
   padding: 8px max(16px, env(safe-area-inset-right, 0px)) 8px
-    max(44px, calc(16px + env(safe-area-inset-left, 0px)));
+    max(var(--env-handle-inset, 44px), calc(16px + env(safe-area-inset-left, 0px)));
   flex-shrink: 0;
   overflow: visible;
 }

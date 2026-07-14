@@ -11,21 +11,16 @@
     ['', '0', 'delete'],
   ];
 
-  var ENVELOPE_DESIGN = { width: 343, height: 221 };
+  var ENVELOPE_DESIGN = { width: 343, height: 221, handleOverflow: 38 };
 
-  function resolveEnvelopeSize(host, envelopeOpts) {
-    var designWidth = envelopeOpts.width || ENVELOPE_DESIGN.width;
-    var designHeight = envelopeOpts.height || ENVELOPE_DESIGN.height;
+  function resolveEnvelopeScale() {
+    var designWidth = ENVELOPE_DESIGN.width;
     var viewportWidth =
       (window.visualViewport && window.visualViewport.width) || window.innerWidth || designWidth;
-    var hostWidth = (host && host.clientWidth) || viewportWidth;
-    var available = Math.min(hostWidth, viewportWidth);
-    var width = Math.min(designWidth, Math.max(260, Math.floor(available)));
+    var horizontalInset = ENVELOPE_DESIGN.handleOverflow + 32;
+    var available = viewportWidth - horizontalInset;
 
-    return {
-      width: width,
-      height: Math.round(width * (designHeight / designWidth)),
-    };
+    return Math.min(1, available / designWidth);
   }
 
   function ActivationScreen(root, options) {
@@ -112,9 +107,17 @@
       if (typeof userRevealComplete === 'function') userRevealComplete();
     };
 
-    var envelopeSize = resolveEnvelopeSize(envelopeHost, envelopeOpts);
-    envelopeOpts.width = envelopeSize.width;
-    envelopeOpts.height = envelopeSize.height;
+    var envelopeScale = resolveEnvelopeScale();
+    envelopeOpts.scale = envelopeScale;
+    envelopeHost.style.setProperty('--env-scale', envelopeScale);
+    envelopeHost.style.setProperty(
+      '--env-layout-h',
+      Math.ceil(ENVELOPE_DESIGN.height * envelopeScale) + 'px'
+    );
+    envelopeHost.style.setProperty(
+      '--env-handle-inset',
+      Math.ceil(ENVELOPE_DESIGN.handleOverflow * envelopeScale) + 'px'
+    );
 
     this.envelope = global.SplitEnvelope.create(envelopeHost, envelopeOpts);
   };

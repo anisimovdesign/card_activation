@@ -33,10 +33,12 @@
 
   SplitEnvelope.create = function (container, options) {
     var opts = Object.assign({}, options || {});
+    var scale = typeof opts.scale === 'number' ? opts.scale : 1;
     var el = document.createElement('div');
     el.className = 'split-envelope';
     el.style.setProperty('--env-w', (opts.width || DEFAULTS.width) + 'px');
     el.style.setProperty('--env-h', (opts.height || DEFAULTS.height) + 'px');
+    el.style.setProperty('--env-scale', String(scale));
     el.style.setProperty('--env-tear-bottom', (opts.tearBottom || DEFAULTS.tearBottom) + 'px');
     container.appendChild(el);
     return new SplitEnvelope(el, opts);
