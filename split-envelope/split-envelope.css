@@ -8,10 +8,12 @@
 
   position: relative;
   width: var(--env-w);
+  max-width: 100%;
   height: var(--env-h);
   overflow: visible;
   border-radius: 12px;
   user-select: none;
+  flex-shrink: 0;
 }
 
 .split-envelope__inside,
@@ -36,7 +38,8 @@
   left: 50%;
   top: 50%;
   transform: translate(-50%, -50%) scale(1);
-  width: 190px;
+  width: 55.4%;
+  max-width: 190px;
   height: auto;
   z-index: 2;
   opacity: 1;
@@ -207,7 +210,8 @@
 .split-envelope.is-keyboard .split-envelope__form {
   animation: none;
   opacity: 1;
-  width: 190px;
+  width: 55.4%;
+  max-width: 190px;
   transform: translate(-50%, -50%) scale(1.6);
 }
 

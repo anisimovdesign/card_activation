@@ -11,6 +11,23 @@
     ['', '0', 'delete'],
   ];
 
+  var ENVELOPE_DESIGN = { width: 343, height: 221 };
+
+  function resolveEnvelopeSize(host, envelopeOpts) {
+    var designWidth = envelopeOpts.width || ENVELOPE_DESIGN.width;
+    var designHeight = envelopeOpts.height || ENVELOPE_DESIGN.height;
+    var viewportWidth =
+      (window.visualViewport && window.visualViewport.width) || window.innerWidth || designWidth;
+    var hostWidth = (host && host.clientWidth) || viewportWidth;
+    var available = Math.min(hostWidth, viewportWidth);
+    var width = Math.min(designWidth, Math.max(260, Math.floor(available)));
+
+    return {
+      width: width,
+      height: Math.round(width * (designHeight / designWidth)),
+    };
+  }
+
   function ActivationScreen(root, options) {
     this.root = root;
     this.options = options || {};
@@ -94,6 +111,10 @@
       }, 280);
       if (typeof userRevealComplete === 'function') userRevealComplete();
     };
+
+    var envelopeSize = resolveEnvelopeSize(envelopeHost, envelopeOpts);
+    envelopeOpts.width = envelopeSize.width;
+    envelopeOpts.height = envelopeSize.height;
 
     this.envelope = global.SplitEnvelope.create(envelopeHost, envelopeOpts);
   };
