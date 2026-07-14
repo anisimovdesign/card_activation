@@ -219,7 +219,7 @@
   position: absolute;
   left: 0;
   width: 100%;
-  top: calc(var(--env-h) - var(--env-tear-bottom) - var(--ts-seg-h, 30px));
+  top: calc(var(--env-h) - var(--env-tear-bottom) - var(--ts-seg-h, 29px));
   z-index: 4;
 }
 
