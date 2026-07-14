@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Tear strip — peel &amp; scatter demos</title>
+    <link rel="stylesheet" href="../tear-strip/tear-strip.css" />
+    <style>
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        min-height: 100vh;
+        display: grid;
+        place-items: center;
+        background: #f5f5f5;
+        font-family: system-ui, -apple-system, sans-serif;
+      }
+
+      .demo {
+        padding: 48px 24px 80px;
+        display: flex;
+        flex-direction: column;
+        gap: 56px;
+        align-items: center;
+      }
+
+      .demo__block {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 16px;
+      }
+
+      .demo__label {
+        margin: 0;
+        font-size: 13px;
+        font-weight: 600;
+        color: #333;
+        letter-spacing: 0.02em;
+      }
+
+      .demo__hint {
+        margin: 0;
+        color: #666;
+        font-size: 14px;
+        text-align: center;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="demo">
+      <p class="demo__hint">Потяните стрелку вправо →</p>
+
+      <div class="demo__block">
+        <p class="demo__label">Peel — лента складывается за ручкой</p>
+        <div id="strip-peel"></div>
+      </div>
+
+      <div class="demo__block">
+        <p class="demo__label">Scatter — сегменты разлетаются</p>
+        <div id="strip-scatter"></div>
+      </div>
+    </div>
+
+    <script src="../tear-strip/tear-strip.js"></script>
+    <script>
+      TearStrip.create(document.getElementById('strip-peel'), {
+        animationMode: 'peel',
+      });
+
+      TearStrip.create(document.getElementById('strip-scatter'), {
+        animationMode: 'scatter',
+      });
+    </script>
+  </body>
+</html>
