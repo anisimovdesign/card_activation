@@ -25,8 +25,8 @@
     tornScaleEdge: 1,
     tornScalePeak: 1.22,
     trailGap: 15,
-    /** Arrow inset from strip left edge at rest (px) */
-    handleArrowInset: 8,
+    /** Handle pill inset from strip left edge at rest (px) */
+    handleInset: 8,
     onComplete: null,
   };
 
@@ -61,17 +61,15 @@
     return (
       '<svg viewBox="0 0 75 43" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">' +
       '<rect x="0.5" y="0.5" width="74" height="42" rx="21" fill="rgba(236,236,236,0.85)" stroke="white" stroke-width="1"/>' +
-      '<path d="M38 21.5H50" stroke="' +
+      '<path d="M30 21.5H42" stroke="' +
       accent +
       '" stroke-width="2.6" stroke-linecap="round"/>' +
-      '<path d="M46 17.5L50.5 21.5L46 25.5" stroke="' +
+      '<path d="M38 17.5L42.5 21.5L38 25.5" stroke="' +
       accent +
       '" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" fill="none"/>' +
       '</svg>'
     );
   }
-
-  var HANDLE_ARROW_SVG_X = 38;
 
   function TearStrip(root, options) {
     this.root = root;
@@ -88,17 +86,19 @@
     this.dragOffsetX = 0;
     this.scatteredIndices = {};
 
-    this.handleRestCenter = this._getHandleRestCenter();
-
     this._build();
+    this._applyHandleRestOffset();
     this._bindEvents();
-    this.update(this.handleRestCenter);
+    this.update(0);
   }
 
-  TearStrip.prototype._getHandleRestCenter = function () {
+  TearStrip.prototype._applyHandleRestOffset = function () {
     var handleW = this.options.handleWidth || 75;
-    var inset = this.options.handleArrowInset != null ? this.options.handleArrowInset : 8;
-    return inset + handleW / 2 - HANDLE_ARROW_SVG_X;
+    var inset = this.options.handleInset != null ? this.options.handleInset : 8;
+    var restOffset = inset + handleW / 2;
+
+    this.handleRestOffset = restOffset;
+    this.root.style.setProperty('--ts-handle-rest-offset', restOffset + 'px');
   };
 
   TearStrip.create = function (container, options) {
@@ -176,8 +176,9 @@
     this.handle.addEventListener('pointermove', function (e) {
       if (!self.isDragging || e.pointerId !== self.pointerId) return;
       var rootRect = self.root.getBoundingClientRect();
-      var x = e.clientX - rootRect.left - self.dragOffsetX;
-      self.update(clamp(x, self.handleRestCenter, self.stripWidth));
+      var centerX = e.clientX - rootRect.left - self.dragOffsetX;
+      var tearX = centerX - self.handleRestOffset;
+      self.update(clamp(tearX, 0, self.stripWidth));
     });
 
     var endDrag = function (e) {

@@ -148,7 +148,7 @@
 .tear-strip__handle {
   position: absolute;
   top: calc((var(--ts-seg-h) - var(--ts-handle-h)) / 2);
-  left: calc(var(--ts-tear) - var(--ts-handle-w) / 2);
+  left: calc(var(--ts-tear) - var(--ts-handle-w) / 2 + var(--ts-handle-rest-offset, 0px));
   width: var(--ts-handle-w);
   height: var(--ts-handle-h);
   padding: 0;

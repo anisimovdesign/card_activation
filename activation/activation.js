@@ -11,13 +11,13 @@
     ['', '0', 'delete'],
   ];
 
-  var ENVELOPE_DESIGN = { width: 343, height: 221, handleOverflow: 30 };
+  var ENVELOPE_DESIGN = { width: 343, height: 221 };
 
   function resolveEnvelopeScale() {
     var designWidth = ENVELOPE_DESIGN.width;
     var viewportWidth =
       (window.visualViewport && window.visualViewport.width) || window.innerWidth || designWidth;
-    var horizontalInset = ENVELOPE_DESIGN.handleOverflow + 32;
+    var horizontalInset = 32;
     var available = viewportWidth - horizontalInset;
 
     return Math.min(1, available / designWidth);
@@ -113,10 +113,6 @@
     envelopeHost.style.setProperty(
       '--env-layout-h',
       Math.ceil(ENVELOPE_DESIGN.height * envelopeScale) + 'px'
-    );
-    envelopeHost.style.setProperty(
-      '--env-handle-inset',
-      Math.ceil(ENVELOPE_DESIGN.handleOverflow * envelopeScale) + 'px'
     );
 
     this.envelope = global.SplitEnvelope.create(envelopeHost, envelopeOpts);
