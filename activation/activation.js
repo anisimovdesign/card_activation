@@ -125,14 +125,8 @@
   ActivationScreen.prototype._showKeyboard = function () {
     if (this.root.classList.contains('is-keyboard')) return;
 
-    var envelopeHost = this.root.querySelector('.activation__envelope-host');
-    var body = this.root.querySelector('.activation__body');
     var hint = this.root.querySelector('.activation__hint');
     var keyboard = this.root.querySelector('.activation__keyboard');
-    var bodyRect = body.getBoundingClientRect();
-    var shiftY = bodyRect.top + 8 - envelopeHost.getBoundingClientRect().top;
-
-    envelopeHost.style.setProperty('--activation-shift-y', shiftY + 'px');
 
     hint.hidden = false;
     keyboard.hidden = false;

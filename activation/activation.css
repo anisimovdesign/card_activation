@@ -212,9 +212,18 @@
   pointer-events: none;
 }
 
-.activation.is-keyboard .activation__envelope-host {
-  transform: translateY(var(--activation-shift-y, 0));
-  transition: transform var(--activation-keyboard-duration) cubic-bezier(0.33, 0.86, 0.36, 1);
+.activation.is-keyboard .activation__body {
+  justify-content: flex-end;
+  padding-bottom: 12px;
+}
+
+.activation.is-keyboard .activation__center {
+  flex: 0 0 auto;
+}
+
+.activation.is-keyboard .activation__hint {
+  padding-top: 12px;
+  padding-bottom: 0;
 }
 
 .activation.is-keyboard .activation__keyboard {
