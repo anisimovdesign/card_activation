@@ -127,7 +127,7 @@
 .ts-seg {
   position: absolute;
   top: 0;
-  width: var(--ts-seg-w);
+  width: calc(var(--ts-seg-w) + var(--ts-seg-overlap, 1px));
   height: var(--ts-seg-h);
 }
 

@@ -27,6 +27,8 @@
     trailGap: 15,
     /** Handle pill inset from strip left edge at rest (px) */
     handleInset: 8,
+    /** Overlap between adjacent segments to hide subpixel seams (px) */
+    segmentOverlap: 1,
     onComplete: null,
   };
 
@@ -36,7 +38,7 @@
 
   function segmentSvg(color) {
     return (
-      '<svg viewBox="0 0 30 36" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">' +
+      '<svg viewBox="0 0 30 36" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" shape-rendering="geometricPrecision">' +
       '<path d="' +
       SEGMENT_PATH +
       '" fill="' +
@@ -141,6 +143,7 @@
       var hostWidth = container.clientWidth || container.offsetWidth;
       if (hostWidth > 0) {
         count = Math.ceil(hostWidth / width);
+        width = hostWidth / count;
       }
     }
 
@@ -148,9 +151,14 @@
     var mode = opts.animationMode || DEFAULTS.animationMode;
     el.className = 'tear-strip tear-strip--' + mode;
     el.style.setProperty('--ts-strip-w', count * width + 'px');
+    el.style.setProperty('--ts-seg-w', width + 'px');
+    el.style.setProperty(
+      '--ts-seg-overlap',
+      (opts.segmentOverlap != null ? opts.segmentOverlap : DEFAULTS.segmentOverlap) + 'px'
+    );
     el.style.setProperty('--ts-accent', opts.color || DEFAULTS.color);
     container.appendChild(el);
-    return new TearStrip(el, Object.assign({}, opts, { segmentCount: count }));
+    return new TearStrip(el, Object.assign({}, opts, { segmentCount: count, segmentWidth: width }));
   };
 
   TearStrip.prototype._build = function () {
