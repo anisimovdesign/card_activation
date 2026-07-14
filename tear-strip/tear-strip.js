@@ -98,7 +98,17 @@
     var restOffset = inset + handleW / 2;
 
     this.handleRestOffset = restOffset;
+    this.tearMax = Math.max(0, this.stripWidth - inset * 2 - handleW);
     this.root.style.setProperty('--ts-handle-rest-offset', restOffset + 'px');
+  };
+
+  TearStrip.prototype._getTornProgress = function (tearPx) {
+    if (this.tearMax <= 0) return 0;
+    return clamp(tearPx / this.tearMax, 0, 1);
+  };
+
+  TearStrip.prototype._getEffectiveTearPx = function (tearPx) {
+    return this._getTornProgress(tearPx) * this.stripWidth;
   };
 
   TearStrip.create = function (container, options) {
